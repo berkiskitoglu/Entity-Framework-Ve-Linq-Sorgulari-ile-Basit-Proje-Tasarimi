@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DbEntityUrunModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Tbl_Kategoriler">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Ad" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Tbl_Urunler" Relationship="Self.FK_Tbl_Urunler_Tbl_Kategoriler" FromRole="Tbl_Kategoriler" ToRole="Tbl_Urunler" />
+  </EntityType>
+  <EntityType Name="Tbl_Musteriler">
+    <Key>
+      <PropertyRef Name="MusteriID" />
+    </Key>
+    <Property Name="MusteriID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MusteriAd" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="MusteriSoyad" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Sehir" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Tbl_Satislar" Relationship="Self.FK_Tbl_Satislar_Tbl_Musteriler" FromRole="Tbl_Musteriler" ToRole="Tbl_Satislar" />
+    <Property Name="Durum" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="Tbl_Satislar">
+    <Key>
+      <PropertyRef Name="SatisID" />
+    </Key>
+    <Property Name="SatisID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Urun" Type="Int32" />
+    <Property Name="Musteri" Type="Int32" />
+    <Property Name="Fiyat" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Tarih" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="Tbl_Musteriler" Relationship="Self.FK_Tbl_Satislar_Tbl_Musteriler" FromRole="Tbl_Satislar" ToRole="Tbl_Musteriler" />
+    <NavigationProperty Name="Tbl_Urunler" Relationship="Self.FK_Tbl_Satislar_Tbl_Urunler" FromRole="Tbl_Satislar" ToRole="Tbl_Urunler" />
+  </EntityType>
+  <EntityType Name="Tbl_Urunler">
+    <Key>
+      <PropertyRef Name="UrunID" />
+    </Key>
+    <Property Name="UrunID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UrunAd" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Marka" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Stok" Type="Int16" />
+    <Property Name="Fiyat" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Durum" Type="Boolean" />
+    <Property Name="Kategori" Type="Int32" />
+    <NavigationProperty Name="Tbl_Kategoriler" Relationship="Self.FK_Tbl_Urunler_Tbl_Kategoriler" FromRole="Tbl_Urunler" ToRole="Tbl_Kategoriler" />
+    <NavigationProperty Name="Tbl_Satislar" Relationship="Self.FK_Tbl_Satislar_Tbl_Urunler" FromRole="Tbl_Urunler" ToRole="Tbl_Satislar" />
+  </EntityType>
+  <Association Name="FK_Tbl_Urunler_Tbl_Kategoriler">
+    <End Role="Tbl_Kategoriler" Type="Self.Tbl_Kategoriler" Multiplicity="0..1" />
+    <End Role="Tbl_Urunler" Type="Self.Tbl_Urunler" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_Kategoriler">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Tbl_Urunler">
+        <PropertyRef Name="Kategori" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tbl_Satislar_Tbl_Musteriler">
+    <End Role="Tbl_Musteriler" Type="Self.Tbl_Musteriler" Multiplicity="0..1" />
+    <End Role="Tbl_Satislar" Type="Self.Tbl_Satislar" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_Musteriler">
+        <PropertyRef Name="MusteriID" />
+      </Principal>
+      <Dependent Role="Tbl_Satislar">
+        <PropertyRef Name="Musteri" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tbl_Satislar_Tbl_Urunler">
+    <End Role="Tbl_Urunler" Type="Self.Tbl_Urunler" Multiplicity="0..1" />
+    <End Role="Tbl_Satislar" Type="Self.Tbl_Satislar" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_Urunler">
+        <PropertyRef Name="UrunID" />
+      </Principal>
+      <Dependent Role="Tbl_Satislar">
+        <PropertyRef Name="Urun" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DbEntityUrunEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Tbl_Kategoriler" EntityType="Self.Tbl_Kategoriler" />
+    <EntitySet Name="Tbl_Musteriler" EntityType="Self.Tbl_Musteriler" />
+    <EntitySet Name="Tbl_Satislar" EntityType="Self.Tbl_Satislar" />
+    <EntitySet Name="Tbl_Urunler" EntityType="Self.Tbl_Urunler" />
+    <AssociationSet Name="FK_Tbl_Urunler_Tbl_Kategoriler" Association="Self.FK_Tbl_Urunler_Tbl_Kategoriler">
+      <End Role="Tbl_Kategoriler" EntitySet="Tbl_Kategoriler" />
+      <End Role="Tbl_Urunler" EntitySet="Tbl_Urunler" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tbl_Satislar_Tbl_Musteriler" Association="Self.FK_Tbl_Satislar_Tbl_Musteriler">
+      <End Role="Tbl_Musteriler" EntitySet="Tbl_Musteriler" />
+      <End Role="Tbl_Satislar" EntitySet="Tbl_Satislar" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tbl_Satislar_Tbl_Urunler" Association="Self.FK_Tbl_Satislar_Tbl_Urunler">
+      <End Role="Tbl_Urunler" EntitySet="Tbl_Urunler" />
+      <End Role="Tbl_Satislar" EntitySet="Tbl_Satislar" />
+    </AssociationSet>
+    <FunctionImport Name="MARKAGETIR" ReturnType="Collection(String)" />
+    <EntitySet Name="Tbl_Admin" EntityType="DbEntityUrunModel.Tbl_Admin" />
+  </EntityContainer>
+  <EntityType Name="Tbl_Admin">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Kullanici" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Sifre" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+  </EntityType>
+</Schema>
